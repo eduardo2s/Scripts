@@ -6,6 +6,7 @@ Created on Fri Jun 29 22:04:49 2018
 """
 
 import csv 
+import pandas as pd
 from tqdm import tqdm
 file_name = "C:/Users/eduar/Desktop/autores_tratados.csv" #filename is argument 1
             
@@ -24,3 +25,5 @@ for item in tqdm(data, desc="Criando Relações"):
                 target.append(item[j])
                 #print(' -- '.join([item[i], item[j]]))
 
+df = pd.DataFrame({'Source':source, 'Target':target})
+df.to_csv("edges.csv", encoding='UTF-8', index=False)
