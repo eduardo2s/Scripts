@@ -33,7 +33,8 @@ extracted_text = [x.replace('\n', ' ') for x in extracted_text]
 # trata espaços duplicados. Verificar se não é necessário rodar mais de uma vez 
 extracted_text = [x.replace('  ', ' ') for x in extracted_text]
 
-titulo = [re.findall(r'(.*)(?= Medidas: )', text) if re.findall(r'(.*)(?= Procedencia: )', text) == '' else re.findall(r'(.*)(?=Procedencia:)', text) for text in extracted_text]
+
+titulo = [re.findall(r'(.*)(?= Procedencia: )', text) if re.findall(r'(.*)(?= Procedencia: )', text) else re.findall(r'(.*)(?= Medidas: )', text) for text in extracted_text]
 titulo = [''.join(e) for e in titulo]
 
 procedencia = [re.findall(r'(?<= Procedencia: )(.*?)(?= Medidas: )', text) for text in extracted_text]
@@ -42,10 +43,13 @@ procedencia = [''.join(e) for e in procedencia]
 medidas = [re.findall(r'(?<= Medidas: )(.*?)(?= Hilos: )', text) for text in extracted_text]
 medidas = [''.join(e) for e in medidas]
 
+mprima = [re.findall(r'(?<= Materia Prima: )(.*?)(?= Técnica: )', text) for text in extracted_text]
+mprima = [''.join(e) for e in mprima]
+
 hilos = [re.findall(r'(?<= Hilos: )(.*?)(?= Técnica: )', text) for text in extracted_text]
 hilos = [''.join(e) for e in hilos]
 
-tecnicas = [re.findall(r'(?<= Técnica: )(.*?)(?= Estructuras: )', text) for text in extracted_text]
+tecnicas = [re.findall(r'(?<= Técnica: )(.*?)(?= Estructuras: )', text) if re.findall(r'(?<= Técnica: )(.*?)(?= Estructuras: )', text) else re.findall(r'(?<= Técnica: )(.*?)(?= Descripción: )', text) for text in extracted_text]
 tecnicas = [''.join(e) for e in tecnicas]
 
 estruturas = [re.findall(r'(?<= Estructuras: )(.*?)(?= Descripción: )', text) for text in extracted_text]
@@ -54,16 +58,16 @@ estruturas = [''.join(e) for e in estruturas]
 descricao = [re.findall(r'(?<= Descripción: )(.*?)(?= Comentarios: )', text) for text in extracted_text]
 descricao = [''.join(e) for e in descricao]
 
-comentarios = [re.findall(r'(?<= Comentarios: )(.*?)(?= Pieza N°: )', text) for text in extracted_text]
+comentarios = [re.findall(r'(?<= Comentarios: )(.*?)(?= Pieza N°: )', text) if re.findall(r'(?<= Comentarios: )(.*?)(?= Pieza N°: )', text) else re.findall(r'(?<= Comentarios: )(.*?)(?= Piezas N°: )', text) if re.findall(r'(?<= Comentarios: )(.*?)(?= Piezas N°: )', text)  else re.findall(r'(?<= Comentarios: )(.*?)(?= Referencias: )', text) for text in extracted_text]
 comentarios = [''.join(e) for e in comentarios]
 
 referencias = [re.findall(r'(?<= Referencias: )(.*?)(?= Pieza N°: )', text) for text in extracted_text]
 referencias = [''.join(e) for e in referencias]
 
-n_peca = [re.findall(r'(?<= Pieza N°: )(.*?)(?= Foto: )', text) for text in extracted_text]
+n_peca = [re.findall(r'(?<= Pieza N°: )(.*?)(?= Foto: )', text) if re.findall(r'(?<= Pieza N°: )(.*?)(?= Foto: )', text) else re.findall(r'(?<= Piezas N°: )(.*?)(?= Foto: )', text) for text in extracted_text]
 n_peca = [''.join(e) for e in n_peca]
 
-foto = [re.findall(r'(?<= Foto: )(.*?)(?=   )', text) for text in extracted_text]
+foto = [re.findall(r'(?<=Foto)[\:\.] (.*?)(?=   )', text) for text in extracted_text]
 foto = [''.join(e) for e in foto]
 
 # cria um dataframe para exportar como csv
@@ -71,6 +75,7 @@ df = pd.DataFrame({
     'Título':titulo, 
     'Procedencia':procedencia,
     'Medidas':medidas,
+    'Materia Prima':mprima,
     'hilos':hilos,
     'Técnica':tecnicas,
     'Estructuras':estruturas,
@@ -82,5 +87,4 @@ df = pd.DataFrame({
 }) 
 
 df.to_csv(r'C:\\Users\\eduar\\Desktop\\catalogoMNtapeçaria.csv', index=False)
-
     
