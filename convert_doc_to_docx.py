@@ -11,7 +11,7 @@ import win32com.client as win32
 from win32com.client import constants
 
 # Create list of paths to .doc files
-paths = glob('caminho*.doc', recursive=True)
+paths = glob('caminho\\*.doc', recursive=True)
 
 def save_as_docx(path):
     # Opening MS Word
@@ -31,3 +31,10 @@ def save_as_docx(path):
 
 for path in paths:
     save_as_docx(path)
+    
+# REMOVE THE .DOC FILES
+# caminho = path
+files = glob.glob('caminho\\*.doc')
+for f in files:
+    os.remove(f)
+    
