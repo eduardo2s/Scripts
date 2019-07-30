@@ -2,7 +2,16 @@
 """
 Created on Fri Mar 16 21:41:54 2018
 
-@author: eduar
+@author: eduardo
+
+Entenda as tabelas do documento word como linhas e colunas, na lista *lines_desired* são adicionados as linhas que se deseja
+de uma determinada tabela, se forem tabelas diferentes criem mais listas como essa, a contagem é feita a partir do número 1, não
+como no caso do python.
+
+Posteriormente adicione no código a linha desejada e aqui sim, utilize a posição da linha na lista, ou seja, a linha 1 da tabela
+está na posição 0 da lista *lines_desired*
+Row = lines_desired[1], Column = 1
+no caso da coluna a contagem é feita de forma comum, bastando contar na tabela do word e adicionar qual seria o número da coluna
 """
 
 #from time import sleep
@@ -22,7 +31,7 @@ word.Visible = False
 
 final_list=[]
 n = 0
-for infile in tqdm(glob.glob( os.path.join('', '*.doc') ), desc="processando dados", unit="files"):
+for infile in tqdm(glob.glob( os.path.join('caminho', '*.doc') ), desc="processando dados", unit="files"):
 #My checks here
     doc = word.Documents.Open(os.getcwd()+"\\"+infile)
 
