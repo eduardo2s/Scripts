@@ -20,6 +20,7 @@ from time import sleep
 import win32com.client as win32
 import glob
 import os
+import csv
 from tqdm import tqdm
 
 lines_desired = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27]
@@ -32,7 +33,6 @@ word.Visible = False
 final_list=[]
 n = 0
 for infile in tqdm(glob.glob( os.path.join('caminho', '*.doc') ), desc="processando dados", unit="files"):
-#My checks here
     doc = word.Documents.Open(os.getcwd()+"\\"+infile)
 
     sleep(1)
@@ -90,10 +90,11 @@ for infile in tqdm(glob.glob( os.path.join('caminho', '*.doc') ), desc="processa
         final_list.append(listateste)
     doc.Close(False)
 word.Quit()
-    
+
+# seleciona todos os dados que contenham alguma informação
 list2 = [x for x in final_list if x != []]
 
-import csv
+# Guarda CSV da lista de dados gerada
 with open("Lote_2_part1.csv", "w", encoding="utf-8") as f:
     writer = csv.writer(f, quoting=csv.QUOTE_MINIMAL)
     writer.writerow(['UF-Município','Objeto','Número', 'Distrito/Bairro','Título','Nº Anterior', 'Endereço','Subclasse','Origem','Acervo','Classe','Procedência', 'Local no Prédio','Época','Modo de Aquisição/Data', 'Proprietário','Autoria', 'Conjunto com Nº','Responsável Imediato','Material/Técnica','Termos de Indexação', 'Documentação Fotográfica', 'Proteção', 'Proteção Legal', 'Condições de Segurança', 'Estado de Conservação', 'Marcas/Inscrições/Legendas', 'Dimensões(cm)', 'Descrição', 'Especificação do Estado de Conservação', 'Restaurações', 'Restauradores', 'Características Técnicas', 'Características Iconográficas/Ornamentais', 'Dados Históricos', 'Referências Bibliográficas/Arquivísticas', 'Observações', 'Preenchimento Técnico', 'Revisão Técnica', 'Dados Complementares'])
